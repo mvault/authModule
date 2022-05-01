@@ -1,8 +1,8 @@
 import User from './classes/User';
-import Interface from './classes/Interface';
-const user = new User();
+import ui from './classes/Interface';
+const auth = new User();
 
-exports = {
-    auth: user,
-    ui: Interface
+export {
+    auth,
+    ui
 }
