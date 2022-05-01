@@ -54,15 +54,10 @@ export default class User {
         })
           .then((res) => res.json())
           .then((data) => {
-            if (data.success) {
-              // set user token
-              setCookie("token", data.token, 180);
-              // resolve
-              resolve(data);
-            } else {
-              // reject
-              reject(data);
-            }
+            // set user token
+            setCookie("token", data.token, 180);
+            // resolve
+            resolve(data);
           })
           .catch((err) => {
             reject(err);
