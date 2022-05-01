@@ -21,7 +21,7 @@ function getCookie(cname) {
   return "";
 }
 
-class User {
+export default class User {
   constructor(data) {
     if (data) {
       this._id = data._id;

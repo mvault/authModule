@@ -1,7 +1,7 @@
 function throwerrormessage(message) {
     throw new Error(message);
 }
-class Interface {
+export default class Interface {
     constructor(app) {
         this.app = app;
     }
