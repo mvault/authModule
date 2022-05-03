@@ -38,7 +38,7 @@ export default class User {
       this.roles = data.roles;
     }
   }
-  Login(username, password) {
+  Login(username, password, rememberMe) {
     return new Promise((resolve, reject) => {
       if (username && password) {
         // login
@@ -49,7 +49,8 @@ export default class User {
           },
           body: JSON.stringify({
             username: username,
-            password: password
+            password: password,
+            rememberMe: rememberMe
           })
         })
           .then((res) => res.json())
