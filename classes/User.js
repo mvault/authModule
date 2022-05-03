@@ -56,7 +56,7 @@ export default class User {
           .then((res) => res.json())
           .then((data) => {
             // set user token
-            setCookie("token", data.token, 180);
+            setCookie("token", data.token, rememberMe ? 180 : 1);
             // resolve
             resolve(data);
           })
