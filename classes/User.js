@@ -111,4 +111,7 @@ export default class User {
   isAuthenticated() {
     return !!getCookie("token");
   }
+  getToken() {
+    return getCookie("token");
+  }
 }
