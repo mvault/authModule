@@ -69,7 +69,7 @@ export default class User {
     });
   }
   SignUp(displayName, email, phone, passwordConfirmation, password) {
-    return fetch("https://api.mvault.one/auth/register", {
+    fetch("https://api.mvault.one/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -82,10 +82,10 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
+    })
   };
   LoginByProvider (provider, token) {
-    return fetch("https://api.mvault.one/auth/login", {
+    fetch("https://api.mvault.one/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -95,7 +95,9 @@ export default class User {
       }),
     }).then((response) => {
       console.log(response.data);
-    });
+    }).catch(e => {
+      return e
+    })
   }
   getUser() {
     return this;
@@ -152,7 +154,7 @@ export default class User {
         "Authorization": token.token
       }
     }
-    return fetch("https://api.mvault.one/auth/user", {
+    fetch("https://api.mvault.one/auth/user", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -163,8 +165,9 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
-
+    }).catch(e => {
+      return e
+    })
   }
   UpdatePassword(token, Currentpassword, Newpassword, Confirmpassword) {
     if (token) {
@@ -175,7 +178,7 @@ export default class User {
         "Authorization": token.token
       }
     }
-    return fetch("https://api.mvault.one/auth/user/password", {
+    fetch("https://api.mvault.one/auth/user/password", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -186,11 +189,12 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
-
+    }).catch(e => {
+      return e
+    })
   }
   RestPassword(email, phone) {
-    return fetch("https://api.mvault.one/auth/user/sendReset", {
+    fetch("https://api.mvault.one/auth/user/sendReset", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -201,11 +205,13 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
-
+    }).catch(e => {
+      return e
+    })
   }
-  VerifyCode(email) {
-    return fetch("https://api.mvault.one/auth/user/verify", {
+
+  VerifyEmail(email) {
+    fetch("https://api.mvault.one/auth/user/verifyEmail", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -214,11 +220,60 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
-
+    }).catch(e => {
+      return e
+    })
   }
+
+  VerifyPhone(phone) {
+    fetch("https://api.mvault.one/auth/user/verifyPhone", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }, body: JSON.stringify({
+        phone: phone,
+      }),
+    }).then((response) => {
+      return response.json()
+    }).catch(e => {
+      return e
+    })
+  }
+
+  EmailCode(email, code) {
+    fetch("https://api.mvault.one/auth/user/emailCode", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }, body: JSON.stringify({
+        email: email,
+        code: code,
+      }),
+    }).then((response) => {
+      return response.json()
+    }).catch(e => {
+      return e
+    })
+  }
+
+  PhoneCode(phone, code) {
+    fetch("https://api.mvault.one/auth/user/phoneCode", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }, body: JSON.stringify({
+        phone: phone,
+        code: code,
+      }),
+    }).then((response) => {
+      return response.json()
+    }).catch(e => {
+      return e
+    })
+  }
+
   changePassword(code, password, email) {
-    return fetch("https://api.mvault.one/auth/user/changePwd", {
+    fetch("https://api.mvault.one/auth/user/changePwd", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -226,10 +281,11 @@ export default class User {
         code: code,
         email: email,
         password: password
-
       }),
     }).then((response) => {
       return response.json()
-    });
+    }).catch(e => {
+      return e
+    })
   }
 }
