@@ -69,7 +69,7 @@ export default class User {
     });
   }
   SignUp(displayName, email, phone, passwordConfirmation, password) {
-    return fetch("https://api.mvault.one/auth/register", {
+    fetch("https://api.mvault.one/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -82,10 +82,10 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
+    })
   };
   LoginByProvider (provider, token) {
-    return fetch("https://api.mvault.one/auth/login", {
+    fetch("https://api.mvault.one/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -95,7 +95,9 @@ export default class User {
       }),
     }).then((response) => {
       console.log(response.data);
-    });
+    }).catch(e => {
+      return e
+    })
   }
   getUser() {
     return this;
@@ -161,7 +163,7 @@ export default class User {
         addresses : [customer.address]
       }}
     }
-    return fetch("https://api.mvault.one/auth/user", {
+    fetch("https://api.mvault.one/auth/user", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -176,8 +178,9 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
-
+    }).catch(e => {
+      return e
+    })
   }
   getUserInfo (token,scopes) {
     if (token) {
@@ -220,11 +223,12 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
-
+    }).catch(e => {
+      return e
+    })
   }
   RestPassword(email, phone) {
-    return fetch("https://api.mvault.one/auth/user/sendReset", {
+    fetch("https://api.mvault.one/auth/user/sendReset", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -235,8 +239,9 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
-
+    }).catch(e => {
+      return e
+    })
   }
   VerifyEmail(email) {
     return fetch("https://api.mvault.one/auth/user/verifyEmail", {
@@ -248,8 +253,9 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
-
+    }).catch(e => {
+      return e
+    })
   }
   changePassword(code, password, email,phone) {
     return fetch("https://api.mvault.one/auth/user/changePwd", {
@@ -265,6 +271,8 @@ export default class User {
       }),
     }).then((response) => {
       return response.json()
-    });
+    }).catch(e => {
+      return e
+    })
   }
 }
