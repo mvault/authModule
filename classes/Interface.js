@@ -13,9 +13,9 @@ export default class Interface {
             throwerrormessage("div and app are required");
         }
     }
-    open() {
-        window.open(`https://auth.mvault.one?${this.app}`,
-            "MsgWindow",
-            "width=500,height=600")
+    open(hostApp,appDiv) {
+        if (appDiv) {
+        document.getElementById(appDiv).innerHTML= '<iframe src="https://auth.mvault.one/" frameborder="0" style="width:100%;height:800px"></iframe>'
+      }
     }
 }

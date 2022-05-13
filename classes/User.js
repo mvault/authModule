@@ -78,7 +78,7 @@ export default class User {
         email: email,
         password: password,
         passwordConfirmation: passwordConfirmation,
-        phone: phone,
+        phone: phone ? phone.split(' ').join('') : null,
       }),
     }).then((response) => {
       return response.json()
@@ -100,42 +100,42 @@ export default class User {
   getUser() {
     return this;
   }
-  fetchUser(scopes) {
-    const token = getCookie("token");
-    return new Promise((resolve, reject) => {
-      fetch("https://api.mvault.one/auth/user?" + new URLSearchParams(scopes), {
+  fetchUser(token,scopes) {
+    // const token = getCookie("token");
+     return fetch("https://api.mvault.one/auth/user?" + new URLSearchParams(scopes), {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token.token,
           "Content-Type": "application/json",
           Accept: "application/json",
           "X-Scopes": scopes,
         },
       })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            this._id = data._id;
-            this.email = data.email;
-            this.email_verified = data.email_verified;
-            this.phone_verified = data.phone_verified;
-            this.phone = data.phone;
-            this.displayName = data.displayName;
-            this.image = data.image;
-            this.firstName = data.firstName;
-            this.maidenName = data.maidenName;
-            this.middleName = data.middleName;
-            this.lastName = data.lastName;
-            this.roles = data.user.roles;
-            resolve(this);
-          }
-        })
+        .then((res) =>  {  
+                    return res.json()
+})
+        // .then((data) => {
+        //   if (data.error) {
+        //     reject(data.error);
+        //   } else {
+        //     this._id = data._id;
+        //     this.email = data.email;
+        //     this.email_verified = data.email_verified;
+        //     this.phone_verified = data.phone_verified;
+        //     this.phone = data.phone;
+        //     this.displayName = data.displayName;
+        //     this.image = data.image;
+        //     this.firstName = data.firstName;
+        //     this.maidenName = data.maidenName;
+        //     this.middleName = data.middleName;
+        //     this.lastName = data.lastName;
+        //     this.roles = data.user.roles;
+        //     resolve(this);
+        //   }
+        // })
         .catch((err) => {
-          reject(err);
+          return err
         });
-    });
   }
   isAuthenticated() {
     return !!getCookie("token");
@@ -143,42 +143,76 @@ export default class User {
   getToken() {
     return getCookie("token");
   }
-  UpdateUser(token, Username, phone, email) {
-    if (token) {
-      headers = {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Authorization": token.token
-      }
+  UpdateUser(token, Username, phone, email,customer) {
+    // if (token) {
+    //   headers = {
+    //     "Content-Type": "application/json",
+    //     "Accept": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Authorization": token.token
+    //   }
+    // }
+    // let Customer;
+    if (customer.user.address) {
+      customer.user.address.addresses.push(customer.address) 
+    }
+    else{
+      customer.user = {address:{
+        addresses : [customer.address]
+      }}
     }
     return fetch("https://api.mvault.one/auth/user", {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Authorization": token.token
       }, body: JSON.stringify({
         displayName: Username,
         email: email,
         phone: phone,
+        customer: customer.user
       }),
     }).then((response) => {
       return response.json()
     });
 
   }
-  UpdatePassword(token, Currentpassword, Newpassword, Confirmpassword) {
+  getUserInfo (token,scopes) {
     if (token) {
-      headers = {
+    if (scopes.type ==='website') {
+      return fetch("https://api.mvault.one/auth/user?customer=true", {
+     method: "GET",
+     headers:  {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Access-Control-Allow-Origin":"*",
+      "Authorization":token.token
+    },
+   }).then((response) => 
+   { 
+   return response.json() 
+   }); 
+    }
+     }
+  }
+  UpdatePassword(token, Currentpassword, Newpassword, Confirmpassword) {
+    // if (token) {
+    //   headers = {
+    //     "Content-Type": "application/json",
+    //     "Accept": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Authorization": token.token
+    //   }
+    // }
+    return fetch("https://api.mvault.one/auth/user/password", {
+      method: "PATCH",
+      headers:  {
         "Content-Type": "application/json",
         "Accept": "application/json",
         "Access-Control-Allow-Origin": "*",
         "Authorization": token.token
-      }
-    }
-    return fetch("https://api.mvault.one/auth/user/password", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
       }, body: JSON.stringify({
         oldPassword: Currentpassword,
         newPassword: Newpassword,
@@ -204,8 +238,8 @@ export default class User {
     });
 
   }
-  VerifyCode(email) {
-    return fetch("https://api.mvault.one/auth/user/verify", {
+  VerifyEmail(email) {
+    return fetch("https://api.mvault.one/auth/user/verifyEmail", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -217,7 +251,7 @@ export default class User {
     });
 
   }
-  changePassword(code, password, email) {
+  changePassword(code, password, email,phone) {
     return fetch("https://api.mvault.one/auth/user/changePwd", {
       method: "POST",
       headers: {
@@ -225,7 +259,8 @@ export default class User {
       }, body: JSON.stringify({
         code: code,
         email: email,
-        password: password
+        password: password,
+        phone:phone
 
       }),
     }).then((response) => {
