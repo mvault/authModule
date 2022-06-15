@@ -1,6 +1,6 @@
 {
   "name": "@mvault/auth",
-  "version": "4.0.6",
+  "version": "1.0.0",
   "description": "MVault auth module",
   "main": "index.js",
   "scripts": {
@@ -20,8 +20,5 @@
   "bugs": {
     "url": "https://github.com/mvault/authModule/issues"
   },
-  "homepage": "https://github.com/mvault/authModule#readme",
-  "dependencies": {
-    "@mvault/auth": "^2.0.5"
-  }
+  "homepage": "https://github.com/mvault/authModule#readme"
 }
