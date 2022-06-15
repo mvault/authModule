@@ -4,5 +4,5 @@ const auth = new User();
 const ui = new Interface();
 export {
     auth,
-    ui
+    ui,
 }

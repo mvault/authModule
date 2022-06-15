@@ -38,7 +38,7 @@ export default class User {
       this.roles = data.roles;
     }
   }
-  Login(username, password, rememberMe) {
+  Login(username, password,provider,rememberMe) {
     return new Promise((resolve, reject) => {
       if (username && password) {
         // login
@@ -50,6 +50,7 @@ export default class User {
           body: JSON.stringify({
             username: username,
             password: password,
+            provider:provider,
             rememberMe: rememberMe
           })
         })
@@ -85,6 +86,8 @@ export default class User {
     })
   };
   LoginByProvider (provider, token) {
+    return new Promise((resolve, reject) => {
+
     fetch("https://api.mvault.one/auth/login", {
       method: "POST",
       headers: {
@@ -93,11 +96,17 @@ export default class User {
         provider: provider,
         token: token,
       }),
-    }).then((response) => {
-      console.log(response.data);
+    })   .then((res) => res.json())
+    .then((data) => {
+      // set user token
+      setCookie("token", data.token);
+      // resolve
+      resolve(data);
     }).catch(e => {
+      reject(e)
       return e
     })
+  });
   }
   getUser() {
     return this;
