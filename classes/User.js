@@ -69,21 +69,35 @@ export default class User {
       }
     });
   }
-  SignUp({ displayName, email, phone, passwordConfirmation, password }) {
-    fetch("https://api.mvault.one/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        displayName: displayName,
-        email: email,
-        password: password,
-        passwordConfirmation: passwordConfirmation,
-        phone: phone ? phone.split(" ").join("") : null,
-      }),
-    }).then((response) => {
-      return response.json();
+  SignUp(displayName, email, phone, passwordConfirmation, password) {
+    return new Promise((resolve, reject) => {
+      if (displayName && email && phone && passwordConfirmation && password) {
+
+
+        fetch("https://api.mvault.one/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }, body: JSON.stringify({
+            displayName: displayName,
+            email: email,
+            password: password,
+            passwordConfirmation: passwordConfirmation,
+            phone: phone ? phone.split(' ').join('') : null,
+          }),
+        }).then((res) => res.json())
+          .then((data) => {
+            // set user token
+            setCookie("token", data.token, rememberMe ? 180 : 1);
+            // resolve
+            resolve(data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      } else {
+        reject(new Error('Missing required fields'));
+      }
     });
   }
   LoginByProvider({ provider, token }) {
