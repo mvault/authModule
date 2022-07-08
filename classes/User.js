@@ -1,3 +1,4 @@
+"use strict";
 // create User class
 function setCookie(cname, cvalue, exdays) {
   const d = new Date();
@@ -21,7 +22,7 @@ function getCookie(cname) {
   return "";
 }
 
-export default class User {
+export default  class User {
   constructor(data) {
     if (data) {
       this._id = data._id;
@@ -38,7 +39,7 @@ export default class User {
       this.roles = data.roles;
     }
   }
-  Login({ username, password, provider, rememberMe }) {
+  async Login({ username, password, provider, rememberMe }) {
     return new Promise((resolve, reject) => {
       if (username && password) {
         // login
@@ -69,7 +70,7 @@ export default class User {
       }
     });
   }
-  SignUp(displayName, email, phone, passwordConfirmation, password) {
+  async SignUp(displayName, email, phone, passwordConfirmation, password) {
     return new Promise((resolve, reject) => {
       if (displayName && email && phone && passwordConfirmation && password) {
 
@@ -100,7 +101,7 @@ export default class User {
       }
     });
   }
-  LoginByProvider({ provider, token }) {
+  async LoginByProvider({ provider, token }) {
     return new Promise((resolve, reject) => {
       fetch("https://api.mvault.one/auth/login", {
         method: "POST",
@@ -128,7 +129,7 @@ export default class User {
   getUser() {
     return this;
   }
-  fetchUser(scopes) {
+  async fetchUser(scopes) {
     return new Promise((resolve, reject) => {
       if (!this.isAuthenticated()) {
         reject(new Error("User is not authenticated"));
@@ -166,13 +167,13 @@ export default class User {
           });
     });
   }
-  isAuthenticated() {
+  async isAuthenticated() {
     return !!getCookie("token");
   }
-  getToken() {
+  async getToken() {
     return getCookie("token");
   }
-  UpdateUser(token, Username, phone, email, customer) {
+  async UpdateUser(token, Username, phone, email, customer) {
     // if (token) {
     //   headers = {
     //     "Content-Type": "application/json",
@@ -213,7 +214,7 @@ export default class User {
         return e;
       });
   }
-  getUserInfo(token, scopes) {
+  async getUserInfo(token, scopes) {
     if (token) {
       if (scopes.type === "website") {
         return fetch("https://api.mvault.one/auth/user?customer=true", {
@@ -230,7 +231,7 @@ export default class User {
       }
     }
   }
-  UpdatePassword(token, Currentpassword, Newpassword, Confirmpassword) {
+  async UpdatePassword(token, Currentpassword, Newpassword, Confirmpassword) {
     // if (token) {
     //   headers = {
     //     "Content-Type": "application/json",
@@ -260,7 +261,7 @@ export default class User {
         return e;
       });
   }
-  RestPassword(email, phone) {
+  async ResetPassword(email, phone) {
     fetch("https://api.mvault.one/auth/user/sendReset", {
       method: "POST",
       headers: {
@@ -278,7 +279,7 @@ export default class User {
         return e;
       });
   }
-  VerifyEmail(email) {
+  async VerifyEmail(email) {
     return fetch("https://api.mvault.one/auth/user/verifyEmail", {
       method: "POST",
       headers: {
@@ -295,7 +296,7 @@ export default class User {
         return e;
       });
   }
-  changePassword(code, password, email, phone) {
+  async changePassword(code, password, email, phone) {
     return fetch("https://api.mvault.one/auth/user/changePwd", {
       method: "POST",
       headers: {

@@ -1,3 +1,4 @@
+'use strict'
 function throwerrormessage(message) {
     throw new Error(message);
 }
